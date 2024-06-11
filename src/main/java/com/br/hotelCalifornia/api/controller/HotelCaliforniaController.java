@@ -63,18 +63,18 @@ public class HotelCaliforniaController  {
 		return  hotelServices.create(hotelCalifornia);
 	}
 	
-	@DeleteMapping("/{id}")
-    public ResponseEntity<?> deletehotelCalifornia(@PathVariable UUID id){
-				
-			ResponseEntity<?> response = hotelServices.delete(id);
-		
-			if(response.getStatusCode() == HttpStatus.OK){
-				return ResponseEntity.ok("Hotel apagado com sucesso");
-			}else{
-				return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
-			}
+	@DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> delete(@PathVariable UUID id){
+		return repository.findById(id)
+		.map(mapping -> {
+    			repository.deleteById(id);
+   
+                 return ResponseEntity.ok().body("Deletado com sucesso");
+		         }).orElse(ResponseEntity.notFound().build());	
 		
 	}	
+	
+
 	
 	@PutMapping(value = "/{id}")
 	 public ResponseEntity<?> updatehotelCalifornia(@PathVariable UUID id, HotelCaliforniaModel hotelCalifornia){
@@ -87,6 +87,6 @@ public class HotelCaliforniaController  {
 			return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
 		}
 	
-}
+	}
 	
 }

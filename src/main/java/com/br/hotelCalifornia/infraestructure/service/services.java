@@ -40,29 +40,5 @@ public class services {
 		return repository.save(hotelCalifornia);
 	}
 	
-	@DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> delete(@PathVariable UUID id){
-		return repository.findById(id)
-		.map(mapping -> {
-    			repository.deleteById(id);
-   
-                 return ResponseEntity.ok().body("Deletado com sucesso");
-		         }).orElse(ResponseEntity.notFound().build());	
-		
-	}	
-	
-	@PutMapping(value = "/{id}")
-	public ResponseEntity<HotelCaliforniaModel> update(@PathVariable UUID id, @RequestBody HotelCaliforniaModel hotelCalifornia) {
-	    return repository.findById(id)
-	        .map(hotelCaliforniaModel -> {
-	            hotelCaliforniaModel.setNome(hotelCalifornia.getNome());
-	            hotelCaliforniaModel.setLocalizacao(hotelCalifornia.getLocalizacao());
-	            hotelCaliforniaModel.setCnpj(hotelCalifornia.getCnpj());
-
-	            HotelCaliforniaModel updatedHotelCalifornia = repository.save(hotelCalifornia);
-	            return ResponseEntity.ok().body(updatedHotelCalifornia);
-	        }).orElse(ResponseEntity.notFound().build());
-	}
-
 	
 }
