@@ -34,12 +34,12 @@ public class HotelCaliforniaController  {
 	
 	private services hotelServices;
 
-	@Autowired
+	
     public HotelCaliforniaController(services hotelServices) {
 		this.hotelServices = hotelServices;
     }
 	
-	@Autowired
+
 	private hotelCaliforniaRepository repository;
 	
 	 @Autowired
