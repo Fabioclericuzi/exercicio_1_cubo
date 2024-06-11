@@ -77,16 +77,17 @@ public class HotelCaliforniaController  {
 
 	
 	@PutMapping(value = "/{id}")
-	 public ResponseEntity<?> updatehotelCalifornia(@PathVariable UUID id, HotelCaliforniaModel hotelCalifornia){
+	 public ResponseEntity<HotelCaliforniaModel> updatehotelCalifornia(@PathVariable UUID id, @RequestBody HotelCaliforniaModel hotelCalifornia){
 		
-		ResponseEntity<?> response = hotelServices.update(id, hotelCalifornia);
+		return repository.findById(id)
+		        .map(hotel -> {
+		        	hotel.setNome(hotelCalifornia.getNome());
+		        	hotel.setLocalizacao(hotelCalifornia.getLocalizacao());
+		        	hotel.setCnpj(hotelCalifornia.getCnpj());
+		            
+		            HotelCaliforniaModel updatedHotelCalifornia = repository.save(hotel);
+	                return ResponseEntity.ok().body(updatedHotelCalifornia);
 	
-		if(response.getStatusCode() == HttpStatus.OK){
-			return ResponseEntity.ok("Hotel atualizado com sucesso");
-		}else{
-			return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
-		}
-	
-	}
-	
+	}).orElse(ResponseEntity.notFound().build());
+}
 }
