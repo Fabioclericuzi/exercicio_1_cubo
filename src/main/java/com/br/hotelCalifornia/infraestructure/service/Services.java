@@ -14,27 +14,29 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.br.hotelCalifornia.infraestructure.model.HotelCaliforniaModel;
 import com.br.hotelCalifornia.infraestructure.repository.hotelCaliforniaRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
-public class services {
+public class Services {
 	
 	
 	@Autowired
 	private hotelCaliforniaRepository repository;
 	
-	@GetMapping
-	public List<HotelCaliforniaModel> findAll(){
+
+	public List<HotelCaliforniaModel> findTodos(){
 		return repository.findAll();
 	}
 	
-	@GetMapping(value="/{id}")
-	public ResponseEntity<HotelCaliforniaModel> find(@PathVariable UUID id){
+	public ResponseEntity<HotelCaliforniaModel> find( UUID id){
 		return repository.findById(id)
 		.map(mapping -> ResponseEntity.ok().body(mapping))
 		.orElse(ResponseEntity.notFound().build());
 	}
 	
-	@PostMapping
-	public HotelCaliforniaModel create(@RequestBody HotelCaliforniaModel hotelCalifornia){
+	
+	public  HotelCaliforniaModel create( HotelCaliforniaModel hotelCalifornia){
 		return repository.save(hotelCalifornia);
 	}
 	

@@ -11,8 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Repository
 public interface hotelCaliforniaRepository extends JpaRepository<HotelCaliforniaModel, UUID>{
 	
