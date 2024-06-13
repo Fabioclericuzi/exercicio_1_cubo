@@ -22,16 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.br.hotelCalifornia.infraestructure.model.HotelCaliforniaModel;
 import com.br.hotelCalifornia.infraestructure.service.Services;
 
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping({"/api/hotel"})
-@RequiredArgsConstructor
 public class HotelCaliforniaController  {
 	
-	@Autowired
 	private Services hotelServices;
-
+	
+	@Autowired
+    public HotelCaliforniaController(Services hotelServices) {
+		this.hotelServices = hotelServices;
+	}
 	
     @GetMapping
 	public List<?> findTodosHoteis(){
