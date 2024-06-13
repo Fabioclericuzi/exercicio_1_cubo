@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class Services {
 	
 	
-	@Autowired
+	
 	private hotelCaliforniaRepository repository;
 	
 
@@ -40,5 +40,27 @@ public class Services {
 		return repository.save(hotelCalifornia);
 	}
 	
+	 public ResponseEntity<HotelCaliforniaModel> update(UUID id, HotelCaliforniaModel hotelCalifornia){
+			
+			return repository.findById(id)
+			        .map(hotel -> {
+			        	hotel.setNome(hotelCalifornia.getNome());
+			        	hotel.setLocalizacao(hotelCalifornia.getLocalizacao());
+			        	hotel.setCnpj(hotelCalifornia.getCnpj());
+			            
+			            HotelCaliforniaModel updatedHotelCalifornia = repository.save(hotel);
+		                return ResponseEntity.ok().body(updatedHotelCalifornia);
+		
+		}).orElse(ResponseEntity.notFound().build());
+	}
+	 
+	 public ResponseEntity<?> delete(@PathVariable UUID id){
+			return repository.findById(id)
+			.map(mapping -> {
+	    			repository.deleteById(id);
+	   
+	                 return ResponseEntity.ok().body("Deletado com sucesso");
+			         }).orElse(ResponseEntity.notFound().build());	
 	
+	 }
 }

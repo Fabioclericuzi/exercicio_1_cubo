@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.br.hotelCalifornia.infraestructure.model.HotelCaliforniaModel;
-import com.br.hotelCalifornia.infraestructure.repository.hotelCaliforniaRepository;
 import com.br.hotelCalifornia.infraestructure.service.Services;
 
 import lombok.RequiredArgsConstructor;
@@ -30,23 +29,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class HotelCaliforniaController  {
 	
+	@Autowired
 	private Services hotelServices;
 
 	
-    public HotelCaliforniaController(Services hotelServices) {
-		this.hotelServices = hotelServices;
-    }
-	
-
-	private hotelCaliforniaRepository repository;
-	
-	 @Autowired
-	    public HotelCaliforniaController(hotelCaliforniaRepository repository) {
-	        this.repository = repository;
-	    }
-	
-	
-	@GetMapping
+    @GetMapping
 	public List<?> findTodosHoteis(){
 		return hotelServices.findTodos();
 	}
@@ -57,35 +44,18 @@ public class HotelCaliforniaController  {
 	}
 	
 	@PostMapping(value="/salvar")
-	public HotelCaliforniaModel createhotelCalifornia(@RequestBody HotelCaliforniaModel hotelCalifornia){
+	public HotelCaliforniaModel createHotelCalifornia(@RequestBody HotelCaliforniaModel hotelCalifornia){
 		return  hotelServices.create(hotelCalifornia);
 	}
 	
 	@DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> delete(@PathVariable UUID id){
-		return repository.findById(id)
-		.map(mapping -> {
-    			repository.deleteById(id);
-   
-                 return ResponseEntity.ok().body("Deletado com sucesso");
-		         }).orElse(ResponseEntity.notFound().build());	
+    public ResponseEntity<?> deleteHotelCalifornia(@PathVariable UUID id){
+		return hotelServices.delete(id);
 		
 	}	
 	
-
-	
 	@PutMapping(value = "/{id}")
-	 public ResponseEntity<HotelCaliforniaModel> updatehotelCalifornia(@PathVariable UUID id, @RequestBody HotelCaliforniaModel hotelCalifornia){
-		
-		return repository.findById(id)
-		        .map(hotel -> {
-		        	hotel.setNome(hotelCalifornia.getNome());
-		        	hotel.setLocalizacao(hotelCalifornia.getLocalizacao());
-		        	hotel.setCnpj(hotelCalifornia.getCnpj());
-		            
-		            HotelCaliforniaModel updatedHotelCalifornia = repository.save(hotel);
-	                return ResponseEntity.ok().body(updatedHotelCalifornia);
-	
-	}).orElse(ResponseEntity.notFound().build());
-}
+	public ResponseEntity<HotelCaliforniaModel> putHotelCalifornia(@PathVariable UUID id ,@RequestBody HotelCaliforniaModel hotelCalifornia){
+		return  hotelServices.update(id ,hotelCalifornia);
+	}
 }
