@@ -55,6 +55,8 @@ public class HotelCaliforniaController  {
 		
 	}	
 	
+	
+	
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<HotelCaliforniaModel> putHotelCalifornia(@PathVariable UUID id ,@RequestBody HotelCaliforniaModel hotelCalifornia){
 		return  hotelServices.update(id ,hotelCalifornia);
