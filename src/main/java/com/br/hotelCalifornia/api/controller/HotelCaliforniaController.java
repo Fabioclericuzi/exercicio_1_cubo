@@ -2,12 +2,13 @@ package com.br.hotelCalifornia.api.controller;
 
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,7 @@ import com.br.hotelCalifornia.infraestructure.service.Services;
 
 @RestController
 @RequestMapping({"/api/hotel"})
-public class HotelCaliforniaController  {
+public class HotelCaliforniaController<T>  {
 	
 	private Services hotelServices;
 	
@@ -40,7 +41,7 @@ public class HotelCaliforniaController  {
 	}
 	
 	@GetMapping(value="/{id}")
-	public ResponseEntity<HotelCaliforniaModel> findHotelCalifornia(@PathVariable UUID id){
+	public Optional<HotelCaliforniaModel> findHotelCalifornia(@PathVariable UUID id){
 		return hotelServices.find(id);
 	}
 	
@@ -55,10 +56,14 @@ public class HotelCaliforniaController  {
 		
 	}	
 	
-	
-	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<HotelCaliforniaModel> putHotelCalifornia(@PathVariable UUID id ,@RequestBody HotelCaliforniaModel hotelCalifornia){
-		return  hotelServices.update(id ,hotelCalifornia);
+	public ResponseEntity<Object> putHotelCalifornia(@RequestBody HotelCaliforniaModel hotelCalifornia, @PathVariable UUID id){
+			Optional<HotelCaliforniaModel> achar = hotelServices.find(id);
+			if(!achar.isPresent()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro ao buscar hotel");			
+		}
+			hotelServices.create(hotelCalifornia);
+			return ResponseEntity.status(HttpStatus.OK).body("Atualização realizada com sucesso no objeto: " + hotelCalifornia );
 	}
+	
 }

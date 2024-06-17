@@ -1,9 +1,11 @@
 package com.br.hotelCalifornia.infraestructure.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,7 +18,7 @@ import com.br.hotelCalifornia.infraestructure.repository.hotelCaliforniaReposito
 
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+
 @Service
 public class Services {
 	
@@ -29,39 +31,22 @@ public class Services {
 		this.repository = repository;
 	}
 	
-	@Autowired
+	
 	public List<HotelCaliforniaModel> findTodos(){
 		return repository.findAll();
 	}
 	
-	@GetMapping(value="/{id}")
-	public ResponseEntity<HotelCaliforniaModel> find( UUID id){
-		return repository.findById(id)
-		.map(mapping -> ResponseEntity.ok().body(mapping))
-		.orElse(ResponseEntity.notFound().build());
+	
+	public Optional<HotelCaliforniaModel> find(UUID id){
+		return repository.findById(id);
+		
 	}
 	
 	
 	public  HotelCaliforniaModel create( HotelCaliforniaModel hotelCalifornia){
 		return repository.save(hotelCalifornia);
 	}
-	
-	@PutMapping(value="/{id}")
-	 public ResponseEntity<HotelCaliforniaModel> update(UUID id, HotelCaliforniaModel hotelCalifornia){
-			
-			return repository.findById(id)
-			        .map(hotel -> {
-			        	hotel.setNome(hotelCalifornia.getNome());
-			        	hotel.setLocalizacao(hotelCalifornia.getLocalizacao());
-			        	hotel.setCnpj(hotelCalifornia.getCnpj());
-			            
-			            HotelCaliforniaModel updatedHotelCalifornia = repository.save(hotel);
-		                return ResponseEntity.ok().body(updatedHotelCalifornia);
-		
-		}).orElse(ResponseEntity.notFound().build());
-	}
 	 
-	@DeleteMapping(value="/{id}")
 	 public ResponseEntity<?> delete(@PathVariable UUID id){
 			return repository.findById(id)
 			.map(mapping -> {
