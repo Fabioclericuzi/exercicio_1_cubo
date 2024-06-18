@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.br.hotelCalifornia.infraestructure.model.HotelCaliforniaModel;
 import com.br.hotelCalifornia.infraestructure.repository.hotelCaliforniaRepository;
@@ -22,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class Services {
 	
-	
+	private Services hotelServices;
 	
 	private hotelCaliforniaRepository repository;
 	
@@ -47,13 +48,8 @@ public class Services {
 		return repository.save(hotelCalifornia);
 	}
 	 
-	 public ResponseEntity<?> delete(@PathVariable UUID id){
-			return repository.findById(id)
-			.map(mapping -> {
-	    			repository.deleteById(id);
-	   
-	                 return ResponseEntity.ok().body("Deletado com sucesso");
-			         }).orElse(ResponseEntity.notFound().build());	
-	
+	 public void delete(HotelCaliforniaModel hotelCalifornia){
+			repository.delete(hotelCalifornia);
+	 
 	 }
 }
