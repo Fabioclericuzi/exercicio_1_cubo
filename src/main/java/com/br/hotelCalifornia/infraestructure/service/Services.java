@@ -52,4 +52,8 @@ public class Services {
 			repository.delete(hotelCalifornia);
 	 
 	 }
+	 
+	 public HotelCaliforniaModel findCnpj(String cnpj) {
+		 return repository.findCnpj(cnpj);
+	 }
 }

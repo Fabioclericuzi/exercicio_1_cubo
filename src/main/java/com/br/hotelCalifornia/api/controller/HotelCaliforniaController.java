@@ -70,6 +70,8 @@ public class HotelCaliforniaController<T>  {
 		hotelServices.create(hotelCalifornia);
 		return ResponseEntity.status(HttpStatus.OK).body("Atualização realizada com sucesso no objeto: " + hotelCalifornia );
 		}
-			
-	
+	@GetMapping(value="/getcnpj/{cnpj}")		
+	public ResponseEntity<HotelCaliforniaModel> buscarPorCnpj(@PathVariable(value="cnpj") String cnpj){
+		return ResponseEntity.status(HttpStatus.OK).body(hotelServices.findCnpj(cnpj));
+	}
 }

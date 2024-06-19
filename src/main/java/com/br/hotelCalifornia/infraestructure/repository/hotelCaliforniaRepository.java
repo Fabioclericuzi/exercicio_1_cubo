@@ -3,15 +3,17 @@ package com.br.hotelCalifornia.infraestructure.repository;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.br.hotelCalifornia.infraestructure.model.HotelCaliforniaModel;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-
 
 @Repository
 public interface hotelCaliforniaRepository extends JpaRepository<HotelCaliforniaModel, UUID>{
+	
+	@Query(value= "SELECT * FROM hotel_california hc WHERE hc.cnpj := cnpj", nativeQuery=true)
+	HotelCaliforniaModel findCnpj(@Param("cnpj")String cnpj);
 	
 }
