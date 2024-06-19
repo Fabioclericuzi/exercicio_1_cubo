@@ -13,7 +13,7 @@ import com.br.hotelCalifornia.infraestructure.model.HotelCaliforniaModel;
 @Repository
 public interface hotelCaliforniaRepository extends JpaRepository<HotelCaliforniaModel, UUID>{
 	
-	@Query(value= "SELECT * FROM hotel_california hc WHERE hc.cnpj := cnpj", nativeQuery=true)
+	@Query(value= "SELECT * FROM hotel_california hc WHERE hc.cnpj = :cnpj", nativeQuery=true)
 	HotelCaliforniaModel findCnpj(@Param("cnpj")String cnpj);
 	
 }
