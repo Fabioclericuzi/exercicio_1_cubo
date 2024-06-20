@@ -56,4 +56,8 @@ public class Services {
 	 public HotelCaliforniaModel findCnpj(String cnpj) {
 		 return repository.findCnpj(cnpj);
 	 }
+	 
+	 public HotelCaliforniaModel findNome(String nome) {
+		 return repository.findNome(nome);
+	 }
 }

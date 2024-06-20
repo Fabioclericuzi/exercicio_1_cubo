@@ -74,4 +74,9 @@ public class HotelCaliforniaController<T>  {
 	public ResponseEntity<HotelCaliforniaModel> buscarPorCnpj(@PathVariable(value="cnpj") String cnpj){
 		return ResponseEntity.status(HttpStatus.OK).body(hotelServices.findCnpj(cnpj));
 	}
+	
+	@GetMapping(value="/getnome/{nome}")		
+	public ResponseEntity<HotelCaliforniaModel> buscarNome(@PathVariable(value="nome") String nome){
+		return ResponseEntity.status(HttpStatus.OK).body(hotelServices.findNome(nome));
+	}
 }

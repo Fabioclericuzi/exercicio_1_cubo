@@ -16,4 +16,7 @@ public interface hotelCaliforniaRepository extends JpaRepository<HotelCalifornia
 	@Query(value= "SELECT * FROM hotel_california hc WHERE hc.cnpj = :cnpj", nativeQuery=true)
 	HotelCaliforniaModel findCnpj(@Param("cnpj")String cnpj);
 	
+	@Query(value= "SELECT * FROM hotel_california hc WHERE hc.nome = :nome", nativeQuery=true)
+	HotelCaliforniaModel findNome(@Param("nome")String nome);
 }
+
