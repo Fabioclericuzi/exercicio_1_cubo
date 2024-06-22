@@ -1,5 +1,6 @@
 package com.br.hotelCalifornia.infraestructure.repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,5 +19,8 @@ public interface hotelCaliforniaRepository extends JpaRepository<HotelCalifornia
 	
 	@Query(value= "SELECT * FROM hotel_california hc WHERE hc.nome = :nome", nativeQuery=true)
 	HotelCaliforniaModel findNome(@Param("nome")String nome);
+	
+	@Query(value="SELECT * FROM hotel_california hc WHERE hc.id = :id", nativeQuery = true)
+	Optional<HotelCaliforniaModel> find(@Param("id")UUID id);
 }
 

@@ -51,16 +51,10 @@ public class HotelCaliforniaController<T>  {
 	}
 	
 	@DeleteMapping(path = "/{id}")
-    public ResponseEntity<Object> deleteHotelCalifornia(@PathVariable UUID id){
-		Optional<HotelCaliforniaModel> achar = hotelServices.find(id);
-		if(!achar.isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro ao buscar hotel");			
+    public ResponseEntity<Object> deleteHotelCalifornia(@PathVariable UUID id, HotelCaliforniaModel hotelCalifornia){
+		return hotelServices.deleteHotelCalifornia(id, hotelCalifornia);
+			
 	}
-		 hotelServices.delete(achar.get());
-		 return ResponseEntity.status(HttpStatus.OK).body("Deletado com sucesso");
-		
-	}	
-	
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<Object> update(@RequestBody HotelCaliforniaModel hotelCalifornia, @PathVariable UUID id){
 		Optional<HotelCaliforniaModel> achar = hotelServices.find(id);

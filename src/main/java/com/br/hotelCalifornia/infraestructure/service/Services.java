@@ -23,8 +23,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class Services {
 	
-	private Services hotelServices;
-	
+
 	private hotelCaliforniaRepository repository;
 	
 	@Autowired
@@ -48,10 +47,15 @@ public class Services {
 		return repository.save(hotelCalifornia);
 	}
 	 
-	 public void delete(HotelCaliforniaModel hotelCalifornia){
-			repository.delete(hotelCalifornia);
-	 
-	 }
+	public ResponseEntity<Object> deleteHotelCalifornia(@PathVariable UUID id, HotelCaliforniaModel hotelCalifornia){
+		Optional<HotelCaliforniaModel> achar = repository.find(id);
+		if(!achar.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro ao buscar hotel");			
+	}
+		 repository.delete(achar.get());
+		 return ResponseEntity.status(HttpStatus.OK).body("Deletado com sucesso");
+		
+	}
 	 
 	 public HotelCaliforniaModel findCnpj(String cnpj) {
 		 return repository.findCnpj(cnpj);
