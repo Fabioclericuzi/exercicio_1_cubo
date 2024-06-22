@@ -47,7 +47,7 @@ public class Services {
 		return repository.save(hotelCalifornia);
 	}
 	 
-	public ResponseEntity<Object> deleteHotelCalifornia(@PathVariable UUID id, HotelCaliforniaModel hotelCalifornia){
+	public ResponseEntity<Object> deleteHotelCalifornia(UUID id, HotelCaliforniaModel hotelCalifornia){
 		Optional<HotelCaliforniaModel> achar = repository.find(id);
 		if(!achar.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro ao buscar hotel");			
@@ -56,6 +56,20 @@ public class Services {
 		 return ResponseEntity.status(HttpStatus.OK).body("Deletado com sucesso");
 		
 	}
+	
+	  public ResponseEntity<Object> updateHotelCalifornia(UUID id, HotelCaliforniaModel hotelCalifornia) {
+	        Optional<HotelCaliforniaModel> achar = repository.find(id);
+	        if (achar.isPresent()) {
+	            HotelCaliforniaModel hotel = achar.get();
+	            hotel.setNome(hotelCalifornia.getNome());
+	            hotel.setLocalizacao(hotelCalifornia.getLocalizacao());
+	            hotel.setCnpj(hotelCalifornia.getCnpj());
+	            repository.save(hotel);
+	            return ResponseEntity.status(HttpStatus.OK).body("Atualizado com sucesso");
+	        } else {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Hotel não encontrado");
+	        }
+	    }
 	 
 	 public HotelCaliforniaModel findCnpj(String cnpj) {
 		 return repository.findCnpj(cnpj);
