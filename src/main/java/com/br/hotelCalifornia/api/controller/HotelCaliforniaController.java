@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import com.br.hotelCalifornia.infraestructure.model.HotelCaliforniaModel;
 import com.br.hotelCalifornia.infraestructure.model.dto.HotelCaliforniaDto;
 import com.br.hotelCalifornia.infraestructure.service.Services;
@@ -42,8 +41,8 @@ public class HotelCaliforniaController<T>  {
 	}
 	
 	@GetMapping(value="/{id}")
-	public Optional<HotelCaliforniaDto> findHotelCalifornia(@PathVariable UUID id){
-		return hotelServices.find(id);
+	public HotelCaliforniaDto findHotelCalifornia(@PathVariable UUID id){
+		return hotelServices.achar(id);
 	}
 	
 	@PostMapping(value="/salvar")
@@ -54,7 +53,7 @@ public class HotelCaliforniaController<T>  {
 	}
 	
 	@DeleteMapping(path = "/{id}")
-    public ResponseEntity<Object> deleteHotelCalifornia(@PathVariable UUID id, HotelCaliforniaDto hotelCalifornia){
+    public HotelCaliforniaDto deleteHotelCalifornia(@PathVariable UUID id, HotelCaliforniaDto hotelCalifornia){
 		return hotelServices.deleteHotelCalifornia(id, hotelCalifornia);
 			
 	}
@@ -68,7 +67,7 @@ public class HotelCaliforniaController<T>  {
 	}
 	
 	@GetMapping(value="/getnome/{nome}")		
-	public ResponseEntity<HotelCaliforniaDto> buscarNome(@PathVariable(value="nome") String nome){
+	public ResponseEntity<HotelCaliforniaModel> buscarNome(@PathVariable(value="nome") String nome){
 		return ResponseEntity.status(HttpStatus.OK).body(hotelServices.findNome(nome));
 	}
 }

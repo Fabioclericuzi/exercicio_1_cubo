@@ -70,6 +70,7 @@ public class HotelCaliforniaModel {
 	public void setCnpj(String cnpj) {
 		this.cnpj = cnpj;
 	}
-    
+
+	
     
 }
