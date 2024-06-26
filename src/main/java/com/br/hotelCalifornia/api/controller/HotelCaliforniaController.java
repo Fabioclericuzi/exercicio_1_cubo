@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.br.hotelCalifornia.infraestructure.model.HotelCaliforniaModel;
+import com.br.hotelCalifornia.infraestructure.model.dto.HotelCaliforniaDto;
 import com.br.hotelCalifornia.infraestructure.service.Services;
 
 
@@ -41,31 +42,33 @@ public class HotelCaliforniaController<T>  {
 	}
 	
 	@GetMapping(value="/{id}")
-	public Optional<HotelCaliforniaModel> findHotelCalifornia(@PathVariable UUID id){
+	public Optional<HotelCaliforniaDto> findHotelCalifornia(@PathVariable UUID id){
 		return hotelServices.find(id);
 	}
 	
 	@PostMapping(value="/salvar")
-	public HotelCaliforniaModel createHotelCalifornia(@RequestBody HotelCaliforniaModel hotelCalifornia){
-		return  hotelServices.create(hotelCalifornia);
+	public ResponseEntity<HotelCaliforniaDto> createHotelCalifornia(@RequestBody HotelCaliforniaDto hotelCalifornia){
+		HotelCaliforniaDto hotelDto = hotelServices.create(hotelCalifornia);
+		return  ResponseEntity.status(HttpStatus.CREATED).body(hotelDto);	
+		
 	}
 	
 	@DeleteMapping(path = "/{id}")
-    public ResponseEntity<Object> deleteHotelCalifornia(@PathVariable UUID id, HotelCaliforniaModel hotelCalifornia){
+    public ResponseEntity<Object> deleteHotelCalifornia(@PathVariable UUID id, HotelCaliforniaDto hotelCalifornia){
 		return hotelServices.deleteHotelCalifornia(id, hotelCalifornia);
 			
 	}
-	@PutMapping(value = "/{id}")
-	public ResponseEntity<Object> update(@RequestBody HotelCaliforniaModel hotelCalifornia, @PathVariable UUID id){
-		return hotelServices.updateHotelCalifornia(id, hotelCalifornia);
+	@PutMapping(value = "/{cnpj}")
+	public HotelCaliforniaDto update(@RequestBody HotelCaliforniaDto hotelCalifornia, @PathVariable(value= "cnpj") String cnpj){
+		return hotelServices.updateHotelCalifornia(cnpj, hotelCalifornia);
 	}
 	@GetMapping(value="/getcnpj/{cnpj}")		
-	public ResponseEntity<HotelCaliforniaModel> buscarPorCnpj(@PathVariable(value="cnpj") String cnpj){
+	public ResponseEntity<HotelCaliforniaDto> buscarPorCnpj(@PathVariable(value="cnpj") String cnpj){
 		return ResponseEntity.status(HttpStatus.OK).body(hotelServices.findCnpj(cnpj));
 	}
 	
 	@GetMapping(value="/getnome/{nome}")		
-	public ResponseEntity<HotelCaliforniaModel> buscarNome(@PathVariable(value="nome") String nome){
+	public ResponseEntity<HotelCaliforniaDto> buscarNome(@PathVariable(value="nome") String nome){
 		return ResponseEntity.status(HttpStatus.OK).body(hotelServices.findNome(nome));
 	}
 }
