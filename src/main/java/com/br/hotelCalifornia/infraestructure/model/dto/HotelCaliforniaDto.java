@@ -5,9 +5,8 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,9 +19,5 @@ public class HotelCaliforniaDto {
 		private String localizacao;
 		private String cnpj;
 	
-		public void mensagens(String string) {
-			
-			
-		}
 		
 }

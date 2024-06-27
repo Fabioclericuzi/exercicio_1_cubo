@@ -25,10 +25,8 @@ public interface hotelCaliforniaRepository extends JpaRepository<HotelCalifornia
 	HotelCaliforniaModel findLocalizacao(@Param("localizacao")String localizacao);
 	
 	@Query(value="SELECT * FROM hotel_california hc WHERE hc.id = :id", nativeQuery = true)
-	HotelCaliforniaModel find(@Param("id")UUID id);
+	Optional<HotelCaliforniaModel> find(@Param("id")UUID id);
 
 	HotelCaliforniaModel save(HotelCaliforniaModel hotelModel);
-
-	void delete(HotelCaliforniaModel hotelCaliforniaDto);
+	
 }
-
