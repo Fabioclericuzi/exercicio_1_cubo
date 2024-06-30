@@ -1,28 +1,23 @@
 package com.br.hotelCalifornia.infraestructure.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 
 import com.br.hotelCalifornia.infraestructure.model.HotelCaliforniaModel;
 import com.br.hotelCalifornia.infraestructure.model.dto.HotelCaliforniaDto;
 import com.br.hotelCalifornia.infraestructure.repository.hotelCaliforniaRepository;
 
-import lombok.RequiredArgsConstructor;
+
 
 
 @Service
@@ -38,24 +33,27 @@ public class Services {
 	
 	
 	public List<HotelCaliforniaDto> findTodos(){
-		return repository.findAll();
-	}
+		return repository.findAll().stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
 	
 	
-	public Optional<HotelCaliforniaDto> find(UUID id){
-		return repository.findById(id);
+	
+	public HotelCaliforniaDto find(UUID id) {
+        return repository.findById(id)
+                .map(this::toDto)
+                .orElseThrow(() -> new NoSuchElementException("Erro ao buscar o hotel"));
+    }
 		
-	}
 	
-	@Transactional
-	public HotelCaliforniaDto create( HotelCaliforniaDto hotelCalifornia){
-		HotelCaliforniaModel hotelModel = DtotoModel(hotelCalifornia);
-		HotelCaliforniaModel salvarHotel = repository.save(hotelModel);
-		return ModelToDto(salvarHotel);
-	}
+	public HotelCaliforniaDto create(HotelCaliforniaDto dto) {
+        HotelCaliforniaModel model = toModel(dto);
+        return toDto(repository.save(model));
+    }
 	 
-	public ResponseEntity<Object> deleteHotelCalifornia(UUID id, HotelCaliforniaDto hotelCalifornia){
-		Optional<HotelCaliforniaDto> achar = repository.find(id);
+	public ResponseEntity<Object> deleteHotelCalifornia(UUID id, HotelCaliforniaModel hotelCalifornia){
+		Optional<HotelCaliforniaModel> achar = repository.find(id);
 		if(!achar.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro ao buscar hotel");			
 	}
@@ -64,38 +62,38 @@ public class Services {
 		
 	}
 	
-	  public HotelCaliforniaDto updateHotelCalifornia(String cnpj, HotelCaliforniaDto hotelCaliforniaDto) {
-	       HotelCaliforniaModel hotelModel = DtotoModel(hotelCaliforniaDto);
-	       HotelCaliforniaDto hotelsave = repository.findCnpj(cnpj);
-	       if(!hotelsave.getCnpj().equals(cnpj)) {
-	    	   throw new RuntimeException("Erro ao atualizar informações do hotel(cnpj não encontrado)");
-	       }
-	       
-	       return ModelToDto(repository.save(hotelModel));
+	public HotelCaliforniaDto updateHotelCalifornia(UUID id, HotelCaliforniaDto dto) {
+        HotelCaliforniaModel hotel = repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Hotel não encontrado"));
+
+        hotel.setNome(dto.getNome());
+        hotel.setLocalizacao(dto.getLocalizacao());
+        hotel.setCnpj(dto.getCnpj());
+
+        return toDto(repository.save(hotel));
+    }
 	 
-	  }
-	 public HotelCaliforniaDto findCnpj(String cnpj) {
+	 public HotelCaliforniaModel findCnpj(String cnpj) {
 		 return repository.findCnpj(cnpj);
 	 }
 	 
-	 public HotelCaliforniaDto findNome(String nome) {
+	 public HotelCaliforniaModel findNome(String nome) {
 		 return repository.findNome(nome);
 	 }
-	 
-	 private HotelCaliforniaDto ModelToDto(HotelCaliforniaModel hotelCalifornia) {
-		 HotelCaliforniaDto dto = new HotelCaliforniaDto();	
+
+	 private HotelCaliforniaDto toDto(HotelCaliforniaModel hotelCalifornia) {
+		 HotelCaliforniaDto dto = new HotelCaliforniaDto();
 		 BeanUtils.copyProperties(hotelCalifornia, dto);
 		 return dto;
 	 }
-	 private HotelCaliforniaModel DtotoModel(HotelCaliforniaDto dto) {
-		 HotelCaliforniaModel hotelCalifornia = new HotelCaliforniaModel();	
+	 
+	 private HotelCaliforniaModel toModel(HotelCaliforniaDto dto) {
+		 HotelCaliforniaModel hotelCalifornia = new HotelCaliforniaModel();
 		 BeanUtils.copyProperties(dto, hotelCalifornia);
 		 return hotelCalifornia;
 	 }
 	 
-	 private List<HotelCaliforniaDto> ListDto(List<HotelCaliforniaModel> Lista){
-		 return Lista.stream().map(this::ModelToDto).collect(Collectors.toList());
+	 private List<HotelCaliforniaDto> DtoTOList(List<HotelCaliforniaModel> Lista){
+		 return Lista.stream().map(this::toDto).collect(Collectors.toList());
 	 }
-	 
-	 
 }

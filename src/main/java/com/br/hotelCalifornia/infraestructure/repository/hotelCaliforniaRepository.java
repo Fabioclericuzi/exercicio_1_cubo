@@ -13,20 +13,20 @@ import com.br.hotelCalifornia.infraestructure.model.dto.HotelCaliforniaDto;
 
 
 @Repository
-public interface hotelCaliforniaRepository extends JpaRepository<HotelCaliforniaDto, UUID>{
+public interface hotelCaliforniaRepository extends JpaRepository<HotelCaliforniaModel, UUID>{
 	
 	@Query(value= "SELECT * FROM hotel_california hc WHERE hc.cnpj = :cnpj", nativeQuery=true)
-	HotelCaliforniaDto findCnpj(@Param("cnpj")String cnpj);
+	HotelCaliforniaModel findCnpj(@Param("cnpj")String cnpj);
 	
 	@Query(value= "SELECT * FROM hotel_california hc WHERE hc.nome = :nome", nativeQuery=true)
-	HotelCaliforniaDto findNome(@Param("nome")String nome);
+	HotelCaliforniaModel findNome(@Param("nome")String nome);
 	
 	@Query(value="SELECT * FROM hotel_california hc WHERE hc.localizacao = :localizacao", nativeQuery=true)
-	HotelCaliforniaDto findLocalizacao(@Param("localizacao")String localizacao);
+	HotelCaliforniaModel findLocalizacao(@Param("localizacao")String localizacao);
 	
 	@Query(value="SELECT * FROM hotel_california hc WHERE hc.id = :id", nativeQuery = true)
-	Optional<HotelCaliforniaDto> find(@Param("id")UUID id);
+	Optional<HotelCaliforniaModel> find(@Param("id")UUID id);
 
 	HotelCaliforniaModel save(HotelCaliforniaModel hotelModel);
+	
 }
-

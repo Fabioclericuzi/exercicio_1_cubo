@@ -2,6 +2,7 @@ package com.br.hotelCalifornia.api.controller;
 
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -41,34 +42,43 @@ public class HotelCaliforniaController<T>  {
 		return hotelServices.findTodos();
 	}
 	
-	@GetMapping(value="/{id}")
-	public Optional<HotelCaliforniaDto> findHotelCalifornia(@PathVariable UUID id){
-		return hotelServices.find(id);
-	}
+    public ResponseEntity<HotelCaliforniaDto> findHotelCalifornia(@PathVariable UUID id) {
+        try {
+            HotelCaliforniaDto dto = hotelServices.find(id);
+            return ResponseEntity.ok(dto);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        
+    }
 	
 	@PostMapping(value="/salvar")
-	public ResponseEntity<HotelCaliforniaDto> createHotelCalifornia(@RequestBody HotelCaliforniaDto hotelCalifornia){
-		HotelCaliforniaDto hotelDto = hotelServices.create(hotelCalifornia);
-		return  ResponseEntity.status(HttpStatus.CREATED).body(hotelDto);	
-		
+	public HotelCaliforniaDto createHotelCalifornia(@RequestBody HotelCaliforniaDto hotelCalifornia){
+		return  hotelServices.create(hotelCalifornia);
 	}
 	
 	@DeleteMapping(path = "/{id}")
-    public ResponseEntity<Object> deleteHotelCalifornia(@PathVariable UUID id, HotelCaliforniaDto hotelCalifornia){
+    public ResponseEntity<Object> deleteHotelCalifornia(@PathVariable UUID id, HotelCaliforniaModel hotelCalifornia){
 		return hotelServices.deleteHotelCalifornia(id, hotelCalifornia);
 			
 	}
-	@PutMapping(value = "/{cnpj}")
-	public HotelCaliforniaDto update(@RequestBody HotelCaliforniaDto hotelCalifornia, @PathVariable(value= "cnpj") String cnpj){
-		return hotelServices.updateHotelCalifornia(cnpj, hotelCalifornia);
-	}
+	 
+	@PutMapping(value = "/{id}")
+	 public ResponseEntity<HotelCaliforniaDto> update(@RequestBody HotelCaliforniaDto hotelCalifornia, @PathVariable UUID id) {
+	      try {
+	            HotelCaliforniaDto dto = hotelServices.updateHotelCalifornia(id, hotelCalifornia);
+	            return ResponseEntity.ok(dto);
+	       } catch (NoSuchElementException e) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	       }
+	    }
 	@GetMapping(value="/getcnpj/{cnpj}")		
-	public ResponseEntity<HotelCaliforniaDto> buscarPorCnpj(@PathVariable(value="cnpj") String cnpj){
+	public ResponseEntity<HotelCaliforniaModel> buscarPorCnpj(@PathVariable(value="cnpj") String cnpj){
 		return ResponseEntity.status(HttpStatus.OK).body(hotelServices.findCnpj(cnpj));
 	}
 	
 	@GetMapping(value="/getnome/{nome}")		
-	public ResponseEntity<HotelCaliforniaDto> buscarNome(@PathVariable(value="nome") String nome){
+	public ResponseEntity<HotelCaliforniaModel> buscarNome(@PathVariable(value="nome") String nome){
 		return ResponseEntity.status(HttpStatus.OK).body(hotelServices.findNome(nome));
 	}
 }
