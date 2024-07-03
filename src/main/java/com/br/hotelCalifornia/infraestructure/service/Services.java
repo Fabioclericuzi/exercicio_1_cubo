@@ -72,6 +72,7 @@ public class Services {
 
         return toDto(repository.save(hotel));
     }
+	
 	 
 	 public HotelCaliforniaModel findCnpj(String cnpj) {
 		 return repository.findCnpj(cnpj);

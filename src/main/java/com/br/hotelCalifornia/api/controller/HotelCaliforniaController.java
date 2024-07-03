@@ -42,6 +42,7 @@ public class HotelCaliforniaController<T>  {
 		return hotelServices.findTodos();
 	}
 	
+    @GetMapping(value="/{id}")
     public ResponseEntity<HotelCaliforniaDto> findHotelCalifornia(@PathVariable UUID id) {
         try {
             HotelCaliforniaDto dto = hotelServices.find(id);
