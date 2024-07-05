@@ -14,6 +14,7 @@ import com.br.hotelCalifornia.infraestructure.model.HotelCaliforniaModel;
 @Repository
 public interface hotelCaliforniaRepository extends JpaRepository<HotelCaliforniaModel, UUID>{
 <<<<<<< HEAD
+<<<<<<< HEAD
     
     @Query(value= "SELECT * FROM hotel_california hc WHERE hc.cnpj = :cnpj", nativeQuery=true)
     HotelCaliforniaModel findCnpj(@Param("cnpj")String cnpj);
@@ -31,6 +32,8 @@ public interface hotelCaliforniaRepository extends JpaRepository<HotelCalifornia
     
     
 =======
+=======
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 	
 	@Query(value= "SELECT * FROM hotel_california hc WHERE hc.cnpj = :cnpj", nativeQuery=true)
 	HotelCaliforniaModel findCnpj(@Param("cnpj")String cnpj);
@@ -46,5 +49,8 @@ public interface hotelCaliforniaRepository extends JpaRepository<HotelCalifornia
 
 	HotelCaliforniaModel save(HotelCaliforniaModel hotelModel);
 	
+<<<<<<< HEAD
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
+=======
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 }

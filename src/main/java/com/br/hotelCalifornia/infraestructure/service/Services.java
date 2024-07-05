@@ -4,9 +4,14 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 =======
+=======
+import java.util.stream.Collectors;
+
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 import org.springframework.beans.BeanUtils;
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +38,7 @@ public class Services {
 	}
 	
 	
+<<<<<<< HEAD
 <<<<<<< HEAD
 	public List<HotelCaliforniaModel> findTodos(){
 		return repository.findAll();
@@ -64,10 +70,30 @@ public class Services {
 		return repository.save(hotelCalifornia);
 	}
 =======
+=======
+	public List<HotelCaliforniaDto> findTodos(){
+		return repository.findAll().stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+	
+	
+	
+	public HotelCaliforniaDto find(UUID id) {
+        return repository.findById(id)
+                .map(this::toDto)
+                .orElseThrow(() -> new NoSuchElementException("Erro ao buscar o hotel"));
+    }
+		
+	
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 	public HotelCaliforniaDto create(HotelCaliforniaDto dto) {
         HotelCaliforniaModel model = toModel(dto);
         return toDto(repository.save(model));
     }
+<<<<<<< HEAD
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
+=======
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 	 
 	public ResponseEntity<Object> deleteHotelCalifornia(UUID id, HotelCaliforniaModel hotelCalifornia){
@@ -80,6 +106,7 @@ public class Services {
 		
 	}
 	
+<<<<<<< HEAD
 <<<<<<< HEAD
 	  public ResponseEntity<Object> updateHotelCalifornia(UUID id, HotelCaliforniaModel hotelCalifornia) {
 	        Optional<HotelCaliforniaModel> achar = repository.find(id);
@@ -95,6 +122,8 @@ public class Services {
 	        }
 	    }
 =======
+=======
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 	public HotelCaliforniaDto updateHotelCalifornia(UUID id, HotelCaliforniaDto dto) {
         HotelCaliforniaModel hotel = repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Hotel não encontrado"));
@@ -106,6 +135,9 @@ public class Services {
         return toDto(repository.save(hotel));
     }
 	
+<<<<<<< HEAD
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
+=======
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 	 
 	 public HotelCaliforniaModel findCnpj(String cnpj) {
@@ -116,7 +148,10 @@ public class Services {
 		 return repository.findNome(nome);
 	 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 
 	 private HotelCaliforniaDto toDto(HotelCaliforniaModel hotelCalifornia) {
 		 HotelCaliforniaDto dto = new HotelCaliforniaDto();
@@ -133,5 +168,8 @@ public class Services {
 	 private List<HotelCaliforniaDto> DtoTOList(List<HotelCaliforniaModel> Lista){
 		 return Lista.stream().map(this::toDto).collect(Collectors.toList());
 	 }
+<<<<<<< HEAD
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
+=======
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 }

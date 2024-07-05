@@ -42,6 +42,7 @@ public class HotelCaliforniaController<T>  {
 	}
 	
 <<<<<<< HEAD
+<<<<<<< HEAD
 	@GetMapping(value="/{id}")
 	public Optional<HotelCaliforniaModel> findHotelCalifornia(@PathVariable UUID id){
 		return hotelServices.find(id);
@@ -49,6 +50,21 @@ public class HotelCaliforniaController<T>  {
 	
 	@PostMapping(value="/salvar")
 	public HotelCaliforniaModel createHotelCalifornia(@RequestBody HotelCaliforniaModel hotelCalifornia){
+=======
+    @GetMapping(value="/{id}")
+    public ResponseEntity<HotelCaliforniaDto> findHotelCalifornia(@PathVariable UUID id) {
+        try {
+            HotelCaliforniaDto dto = hotelServices.find(id);
+            return ResponseEntity.ok(dto);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        
+    }
+	
+	@PostMapping(value="/salvar")
+	public HotelCaliforniaDto createHotelCalifornia(@RequestBody HotelCaliforniaDto hotelCalifornia){
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 =======
     @GetMapping(value="/{id}")
     public ResponseEntity<HotelCaliforniaDto> findHotelCalifornia(@PathVariable UUID id) {
@@ -73,11 +89,14 @@ public class HotelCaliforniaController<T>  {
 			
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<Object> update(@RequestBody HotelCaliforniaModel hotelCalifornia, @PathVariable UUID id){
 		return hotelServices.updateHotelCalifornia(id, hotelCalifornia);
 	}
 =======
+=======
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 	 
 	@PutMapping(value = "/{id}")
 	 public ResponseEntity<HotelCaliforniaDto> update(@RequestBody HotelCaliforniaDto hotelCalifornia, @PathVariable UUID id) {
@@ -88,6 +107,9 @@ public class HotelCaliforniaController<T>  {
 	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 	       }
 	    }
+<<<<<<< HEAD
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
+=======
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 	@GetMapping(value="/getcnpj/{cnpj}")		
 	public ResponseEntity<HotelCaliforniaModel> buscarPorCnpj(@PathVariable(value="cnpj") String cnpj){
