@@ -11,6 +11,9 @@ import java.util.UUID;
 =======
 import java.util.stream.Collectors;
 
+<<<<<<< HEAD
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
+=======
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 import org.springframework.beans.BeanUtils;
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
@@ -38,6 +41,7 @@ public class Services {
 	}
 	
 	
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	public List<HotelCaliforniaModel> findTodos(){
@@ -87,11 +91,31 @@ public class Services {
 		
 	
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
+=======
+	public List<HotelCaliforniaDto> findTodos(){
+		return repository.findAll().stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+	
+	
+	
+	public HotelCaliforniaDto find(UUID id) {
+        return repository.findById(id)
+                .map(this::toDto)
+                .orElseThrow(() -> new NoSuchElementException("Erro ao buscar o hotel"));
+    }
+		
+	
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 	public HotelCaliforniaDto create(HotelCaliforniaDto dto) {
         HotelCaliforniaModel model = toModel(dto);
         return toDto(repository.save(model));
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
+=======
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 =======
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
@@ -106,6 +130,7 @@ public class Services {
 		
 	}
 	
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	  public ResponseEntity<Object> updateHotelCalifornia(UUID id, HotelCaliforniaModel hotelCalifornia) {
@@ -124,6 +149,8 @@ public class Services {
 =======
 =======
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
+=======
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 	public HotelCaliforniaDto updateHotelCalifornia(UUID id, HotelCaliforniaDto dto) {
         HotelCaliforniaModel hotel = repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Hotel não encontrado"));
@@ -136,6 +163,9 @@ public class Services {
     }
 	
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
+=======
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 =======
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
@@ -149,7 +179,10 @@ public class Services {
 	 }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 =======
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 
@@ -169,6 +202,9 @@ public class Services {
 		 return Lista.stream().map(this::toDto).collect(Collectors.toList());
 	 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
+=======
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 =======
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b

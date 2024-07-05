@@ -9,7 +9,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 =======
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 
@@ -18,7 +21,12 @@ import lombok.Setter;
 @Builder
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 @Data
+=======
+@Getter
+@Setter
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 =======
 @Getter
 @Setter
@@ -35,8 +43,11 @@ public class HotelCaliforniaDto {
 		private String cnpj;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
 =======
+=======
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 =======
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 		
@@ -66,6 +77,9 @@ public class HotelCaliforniaDto {
 		}
 		
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
+=======
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 =======
 >>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
