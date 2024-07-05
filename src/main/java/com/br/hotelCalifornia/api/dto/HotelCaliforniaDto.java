@@ -1,4 +1,4 @@
-package com.br.hotelCalifornia.infraestructure.model.dto;
+package com.br.hotelCalifornia.api.dto;
 
 import java.util.UUID;
 
@@ -8,48 +8,19 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
->>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
-=======
->>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
-
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-@Data
-=======
 @Getter
 @Setter
->>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
-=======
-@Getter
-@Setter
->>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
-=======
-@Getter
-@Setter
->>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 public class HotelCaliforniaDto {
 		private UUID id;
 		
 		private String nome;
 		private String localizacao;
 		private String cnpj;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	
-=======
-=======
->>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
-=======
->>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 		
 		public String getCnpj() {
 			return cnpj;
@@ -76,12 +47,5 @@ public class HotelCaliforniaDto {
 			this.localizacao = localizacao;
 		}
 		
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
-=======
->>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
-=======
->>>>>>> 2d45e4b72b8e36fa393571234386b9d09426058b
 		
 }
