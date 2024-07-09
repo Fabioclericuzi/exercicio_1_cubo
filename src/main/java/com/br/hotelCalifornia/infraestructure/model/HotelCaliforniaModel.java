@@ -20,8 +20,6 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Builder
-
-
 @Table(name = "hotel_california")
 public class HotelCaliforniaModel {
     
