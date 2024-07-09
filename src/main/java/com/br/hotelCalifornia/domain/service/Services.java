@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
@@ -17,6 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.br.hotelCalifornia.api.dto.HotelCaliforniaDto;
+import com.br.hotelCalifornia.domain.conversores.Conversores;
+import com.br.hotelCalifornia.infraestructure.exceptions.BusinessException;
+import com.br.hotelCalifornia.infraestructure.exceptions.UnprocessableEntityException;
 import com.br.hotelCalifornia.infraestructure.model.HotelCaliforniaModel;
 
 import com.br.hotelCalifornia.infraestructure.repository.hotelCaliforniaRepository;
@@ -27,26 +29,37 @@ import com.br.hotelCalifornia.infraestructure.repository.hotelCaliforniaReposito
 @Service
 public class Services {
     
-
-    private hotelCaliforniaRepository repository;
+	private final Conversores converter;
+	
+    private final hotelCaliforniaRepository repository;
     
     @Autowired
-    public Services(hotelCaliforniaRepository repository) {
+    public Services(hotelCaliforniaRepository repository, Conversores converter) {
         this.repository = repository;
+        this.converter = converter;
     }
     
     @Transactional(readOnly = true)
     public List<HotelCaliforniaDto> findTodos(){
-        return repository.findAll().stream()
-                .map(this::toDto)
+        try {
+        	List<HotelCaliforniaModel> hotelCalifornia = repository.findAll();
+        	if(hotelCalifornia.isEmpty()) {
+        		throw new UnprocessableEntityException("Não existem hotéis para serem listados");
+        	}
+    	return hotelCalifornia.stream()
+                .map(converter::toDto)
                 .collect(Collectors.toList());
+    }catch (BusinessException e) {
+		throw new UnprocessableEntityException(e.getMessage());
+	}catch(UnprocessableEntityException e) {
+		throw new BusinessException("Não existem hotéis para serem listados");
+	}
     }
-    
     
     @Transactional(readOnly = true)
     public HotelCaliforniaDto find(UUID id) {
         return repository.findById(id)
-                .map(this::toDto)
+                .map(converter::toDto)
                 .orElseThrow(() -> new NoSuchElementException("Erro ao buscar o hotel"));
     }
         
@@ -54,8 +67,8 @@ public class Services {
     @Modifying
     @Transactional
     public HotelCaliforniaDto create(HotelCaliforniaDto dto) {
-        HotelCaliforniaModel model = toModel(dto);
-        return toDto(repository.save(model));
+        HotelCaliforniaModel model = converter.toModel(dto);
+        return converter.toDto(repository.save(model));
     }
      
     @Modifying
@@ -80,7 +93,7 @@ public class Services {
         hotel.setLocalizacao(dto.getLocalizacao());
         hotel.setCnpj(dto.getCnpj());
 
-        return toDto(repository.save(hotel));
+        return converter.toDto(repository.save(hotel));
     }
     
     @Transactional(readOnly = true)
@@ -93,19 +106,4 @@ public class Services {
          return repository.findNome(nome);
      }
 
-     private HotelCaliforniaDto toDto(HotelCaliforniaModel hotelCalifornia) {
-         HotelCaliforniaDto dto = new HotelCaliforniaDto();
-         BeanUtils.copyProperties(hotelCalifornia, dto);
-         return dto;
-     }
-     
-     private HotelCaliforniaModel toModel(HotelCaliforniaDto dto) {
-         HotelCaliforniaModel hotelCalifornia = new HotelCaliforniaModel();
-         BeanUtils.copyProperties(dto, hotelCalifornia);
-         return hotelCalifornia;
-     }
-     
-     private List<HotelCaliforniaDto> DtoTOList(List<HotelCaliforniaModel> Lista){
-         return Lista.stream().map(this::toDto).collect(Collectors.toList());
-     }
 }
