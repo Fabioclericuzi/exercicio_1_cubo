@@ -1,5 +1,7 @@
 package com.br.hotelCalifornia.infraestructure.exceptions;
 
+import java.util.UUID;
+
 public class BusinessException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 

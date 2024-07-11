@@ -10,16 +10,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Getter
-@Setter
 public class HotelCaliforniaDto {
 		
 		@JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -36,31 +33,5 @@ public class HotelCaliforniaDto {
 		@NotNull(message = "O CNPJ do hotel é obrigatório")
 		@Size(min = 1, max = 14, message = "O CNPJ precisa ter entre 1 e 14 caracteres")
 		private String cnpj;
-		
-		public String getCnpj() {
-			return cnpj;
-		}
-		public void setCnpj(String cnpj) {
-			this.cnpj = cnpj;
-		}
-		public UUID getId() {
-			return id;
-		}
-		public void setId(UUID id) {
-			this.id = id;
-		}
-		public String getNome() {
-			return nome;
-		}
-		public void setNome(String nome) {
-			this.nome = nome;
-		}
-		public String getLocalizacao() {
-			return localizacao;
-		}
-		public void setLocalizacao(String localizacao) {
-			this.localizacao = localizacao;
-		}
-		
 		
 }

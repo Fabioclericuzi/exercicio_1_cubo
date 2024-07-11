@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.br.hotelCalifornia.api.dto.HotelCaliforniaDto;
 import com.br.hotelCalifornia.domain.conversores.Conversores;
 import com.br.hotelCalifornia.infraestructure.exceptions.BusinessException;
+import com.br.hotelCalifornia.infraestructure.exceptions.ConflictException;
 import com.br.hotelCalifornia.infraestructure.exceptions.UnprocessableEntityException;
 import com.br.hotelCalifornia.infraestructure.model.HotelCaliforniaModel;
 
@@ -49,45 +51,66 @@ public class Services {
     	return hotelCalifornia.stream()
                 .map(converter::toDto)
                 .collect(Collectors.toList());
-    }catch (BusinessException e) {
-		throw new UnprocessableEntityException(e.getMessage());
-	}catch(UnprocessableEntityException e) {
-		throw new BusinessException("Não existem hotéis para serem listados");
-	}
+        }catch(UnprocessableEntityException e) {
+    		throw new UnprocessableEntityException(e.getMessage());
     }
+   }
     
     @Transactional(readOnly = true)
     public HotelCaliforniaDto find(UUID id) {
-        return repository.findById(id)
-                .map(converter::toDto)
-                .orElseThrow(() -> new NoSuchElementException("Erro ao buscar o hotel"));
+    	try {
+    	Optional<HotelCaliforniaModel> dto = repository.findById(id);
+    	if(!dto.isPresent()) {
+    		throw new UnprocessableEntityException("Hotel não encontrado");
+    	}
+        return converter.toDto(dto.get());
+    }catch(UnprocessableEntityException e){
+    	throw new UnprocessableEntityException(e.getMessage());
     }
-        
-    
+   }
     @Modifying
     @Transactional
     public HotelCaliforniaDto create(HotelCaliforniaDto dto) {
-        HotelCaliforniaModel model = converter.toModel(dto);
+        try {
+        	if(repository.validaCnpj(dto.getCnpj()) != null){
+        		throw new ConflictException("Já existe esse CNPJ cadastrado");
+        	}
+        	 if (dto.getCnpj() == null || dto.getNome() == null || dto.getLocalizacao() == null) {
+				throw new UnprocessableEntityException("Os campos nome, CNPJ e localização são obrigatórios");
+			}
+        
+    	HotelCaliforniaModel model = converter.toModel(dto);
         return converter.toDto(repository.save(model));
+       }catch(ConflictException e){
+    	   throw new ConflictException(e.getMessage());
+       }catch(BusinessException e){
+    	   throw new UnprocessableEntityException(e.getMessage());
+       }
+        
     }
      
     @Modifying
     @Transactional
     public ResponseEntity<Object> deleteHotelCalifornia(UUID id, HotelCaliforniaModel hotelCalifornia){
-        Optional<HotelCaliforniaModel> achar = repository.find(id);
+        try {
+    	Optional<HotelCaliforniaModel> achar = repository.find(id);
         if(!achar.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro ao buscar hotel");            
+         throw new UnprocessableEntityException("Hotel não encontrado");    
     }
          repository.delete(achar.get());
-         return ResponseEntity.status(HttpStatus.OK).body("Deletado com sucesso");
+         return ResponseEntity.status(HttpStatus.OK).body("Hotel deletado com sucesso");
         
+    }catch(UnprocessableEntityException e) {
+    	throw new UnprocessableEntityException(e.getMessage());
+     }catch(BusinessException e) {
+    	 throw new BusinessException("Hotel não podê ser deletado" + e);
+     }
     }
-    
     @Modifying
     @Transactional
     public HotelCaliforniaDto updateHotelCalifornia(UUID id, HotelCaliforniaDto dto) {
         HotelCaliforniaModel hotel = repository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Hotel não encontrado"));
+                .orElseThrow(() -> new UnprocessableEntityException("Hotel não encontrado"));
 
         hotel.setNome(dto.getNome());
         hotel.setLocalizacao(dto.getLocalizacao());
@@ -97,13 +120,34 @@ public class Services {
     }
     
     @Transactional(readOnly = true)
-     public HotelCaliforniaModel findCnpj(String cnpj) {
-         return repository.findCnpj(cnpj);
+     public HotelCaliforniaDto validaCnpj(String cnpj) {
+         return converter.toDto(repository.validaCnpj(cnpj));
      }
      
     @Transactional(readOnly = true)
-     public HotelCaliforniaModel findNome(String nome) {
-         return repository.findNome(nome);
+     public HotelCaliforniaDto findNome(String nome) {
+        try {
+        	Optional<HotelCaliforniaModel> dto = repository.findNome(nome);
+        	if(!dto.isPresent()) {
+        		throw new UnprocessableEntityException("Nome do hotel não encontrado");
+        	}
+        
+    	return converter.toDto(dto.get());
+     }catch(UnprocessableEntityException e) {
+    	 throw new UnprocessableEntityException(e.getMessage());
      }
-
+    }
+    
+    @Transactional(readOnly = true)
+    public HotelCaliforniaDto findCnpj(String cnpj) {
+        try {
+        	Optional<HotelCaliforniaModel> dto = repository.findCnpj(cnpj);
+        	if(!dto.isPresent()) {
+        		throw new UnprocessableEntityException("CNPJ não encontrado");
+        	}
+        	return converter.toDto(dto.get());
+    }catch(UnprocessableEntityException e){
+    	throw new UnprocessableEntityException(e.getMessage());
+     }
+    } 
 }

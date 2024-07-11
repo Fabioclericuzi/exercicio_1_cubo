@@ -26,14 +26,16 @@ import com.br.hotelCalifornia.infraestructure.model.HotelCaliforniaModel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 
 
 
 
 @RestController
+@Tag(name = "Hotel California")
 @RequestMapping({"/api/hotel"})
-public class HotelCaliforniaController<T>  {
+public class HotelCaliforniaController  {
     
     private Services hotelServices;
     
@@ -45,6 +47,7 @@ public class HotelCaliforniaController<T>  {
     @Operation(summary = "Listar todos os hotéis", method = "GET")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Lista de hotéis recuperada com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Não existem hotéis para serem listados"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @GetMapping(value = "/listar")
@@ -56,22 +59,19 @@ public class HotelCaliforniaController<T>  {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Hotel encontrado com sucesso"),
         @ApiResponse(responseCode = "404", description = "Hotel não encontrado"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+        @ApiResponse(responseCode = "500", description = "Erro interno de servidor")
     })
     @GetMapping(value="/{id}")
     public ResponseEntity<HotelCaliforniaDto> findHotelCalifornia(@Valid @PathVariable UUID id) {
-        try {
-            HotelCaliforniaDto dto = hotelServices.find(id);
+    		HotelCaliforniaDto dto = hotelServices.find(id);
             return ResponseEntity.ok(dto);
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
         
     }
     
     @Operation(summary = "Salvar hotéis", method = "POST")
     @ApiResponses(value = { 
     		@ApiResponse(responseCode = "200", description = "Hotel salvo com sucesso"), 
+    		@ApiResponse(responseCode = "409", description = "Hotel salvo com sucesso"),
     		@ApiResponse(responseCode = "400", description = "Erro ao salvar hotel")
     })
     @PostMapping(value="/salvar")
@@ -109,22 +109,22 @@ public class HotelCaliforniaController<T>  {
     @Operation(summary = "Procurar hotéis pelo CNPJ", method = "GET")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Hotel encontrado com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Hotel não encontrado"),
+        @ApiResponse(responseCode = "404", description = "CNPJ não encontrado"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @GetMapping(value="/getcnpj/{cnpj}")        
-    public ResponseEntity<HotelCaliforniaModel> buscarPorCnpj(@PathVariable(value="cnpj") String cnpj){
-        return ResponseEntity.status(HttpStatus.OK).body(hotelServices.findCnpj(cnpj));
+    public HotelCaliforniaDto buscarPorCnpj(@PathVariable(value="cnpj") String cnpj){
+        return hotelServices.findCnpj(cnpj);
     }
     
     @Operation(summary = "Procurar hotéis pelo Nome", method = "GET")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Hotel encontrado com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Hotel não encontrado"),
+        @ApiResponse(responseCode = "404", description = "Nome do hotel não encontrado"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @GetMapping(value="/getnome/{nome}")        
-    public ResponseEntity<HotelCaliforniaModel> buscarNome(@PathVariable(value="nome") String nome){
-        return ResponseEntity.status(HttpStatus.OK).body(hotelServices.findNome(nome));
+    public HotelCaliforniaDto buscarNome(@PathVariable(value="nome") String nome){
+        return hotelServices.findNome(nome);
     }
 }

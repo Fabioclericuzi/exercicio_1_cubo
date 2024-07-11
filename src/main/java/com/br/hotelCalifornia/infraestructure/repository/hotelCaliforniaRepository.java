@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.br.hotelCalifornia.api.dto.HotelCaliforniaDto;
 import com.br.hotelCalifornia.infraestructure.model.HotelCaliforniaModel;
 
 
@@ -17,11 +18,11 @@ public interface hotelCaliforniaRepository extends JpaRepository<HotelCalifornia
     
 	@Transactional(readOnly = true)
     @Query(value= "SELECT * FROM hotel_california hc WHERE hc.cnpj = :cnpj", nativeQuery=true)
-    HotelCaliforniaModel findCnpj(@Param("cnpj")String cnpj);
+    Optional<HotelCaliforniaModel> findCnpj(@Param("cnpj")String cnpj);
     
 	@Transactional(readOnly = true)
     @Query(value= "SELECT * FROM hotel_california hc WHERE hc.nome = :nome", nativeQuery=true)
-    HotelCaliforniaModel findNome(@Param("nome")String nome);
+    Optional<HotelCaliforniaModel> findNome(@Param("nome")String nome);
     
 	@Transactional(readOnly = true)
     @Query(value="SELECT * FROM hotel_california hc WHERE hc.localizacao = :localizacao", nativeQuery=true)
@@ -31,6 +32,8 @@ public interface hotelCaliforniaRepository extends JpaRepository<HotelCalifornia
     @Query(value="SELECT * FROM hotel_california hc WHERE hc.id = :id", nativeQuery = true)
     Optional<HotelCaliforniaModel> find(@Param("id")UUID id);
 
-    HotelCaliforniaModel save(HotelCaliforniaModel hotelModel);
+	@Transactional(readOnly = true)
+    @Query(value= "SELECT * FROM hotel_california hc WHERE hc.cnpj = :cnpj", nativeQuery=true)
+    HotelCaliforniaModel validaCnpj(@Param("cnpj")String cnpj);
     
 }
