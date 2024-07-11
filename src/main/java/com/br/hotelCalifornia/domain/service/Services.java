@@ -25,6 +25,8 @@ import com.br.hotelCalifornia.infraestructure.model.HotelCaliforniaModel;
 
 import com.br.hotelCalifornia.infraestructure.repository.hotelCaliforniaRepository;
 
+import net.bytebuddy.implementation.bytecode.Throw;
+
 
 
 
@@ -53,6 +55,8 @@ public class Services {
                 .collect(Collectors.toList());
         }catch(UnprocessableEntityException e) {
     		throw new UnprocessableEntityException(e.getMessage());
+    }catch(BusinessException e){
+    	throw new BusinessException("Erro interno do servidor" + e);
     }
    }
     
@@ -66,6 +70,8 @@ public class Services {
         return converter.toDto(dto.get());
     }catch(UnprocessableEntityException e){
     	throw new UnprocessableEntityException(e.getMessage());
+    }catch(BusinessException e) {
+    	throw new BusinessException("Erro interno do servidor" + e);
     }
    }
     @Modifying
@@ -91,25 +97,24 @@ public class Services {
      
     @Modifying
     @Transactional
-    public ResponseEntity<Object> deleteHotelCalifornia(UUID id, HotelCaliforniaModel hotelCalifornia){
+    public HotelCaliforniaDto deleteHotelCalifornia(UUID id) {
         try {
-    	Optional<HotelCaliforniaModel> achar = repository.find(id);
-        if(!achar.isPresent()) {
-         throw new UnprocessableEntityException("Hotel não encontrado");    
+            HotelCaliforniaModel hotel = repository.findById(id)
+                    .orElseThrow(() -> new UnprocessableEntityException("Hotel não encontrado"));
+            repository.delete(hotel);
+            return converter.toDto(hotel);
+        } catch (UnprocessableEntityException e) {
+            throw new UnprocessableEntityException(e.getMessage());
+        } catch (BusinessException e) {
+            throw new BusinessException("Hotel não pode ser deletado: " + e);
+        }
     }
-         repository.delete(achar.get());
-         return ResponseEntity.status(HttpStatus.OK).body("Hotel deletado com sucesso");
-        
-    }catch(UnprocessableEntityException e) {
-    	throw new UnprocessableEntityException(e.getMessage());
-     }catch(BusinessException e) {
-    	 throw new BusinessException("Hotel não podê ser deletado" + e);
-     }
-    }
+
     @Modifying
     @Transactional
     public HotelCaliforniaDto updateHotelCalifornia(UUID id, HotelCaliforniaDto dto) {
-        HotelCaliforniaModel hotel = repository.findById(id)
+        try {
+    	HotelCaliforniaModel hotel = repository.findById(id)
                 .orElseThrow(() -> new UnprocessableEntityException("Hotel não encontrado"));
 
         hotel.setNome(dto.getNome());
@@ -117,6 +122,11 @@ public class Services {
         hotel.setCnpj(dto.getCnpj());
 
         return converter.toDto(repository.save(hotel));
+    }catch(UnprocessableEntityException e) {
+    	throw new UnprocessableEntityException(e.getMessage());
+    }catch(BusinessException e) {
+    	throw new BusinessException(e.getMessage());
+     }
     }
     
     @Transactional(readOnly = true)
@@ -135,6 +145,8 @@ public class Services {
     	return converter.toDto(dto.get());
      }catch(UnprocessableEntityException e) {
     	 throw new UnprocessableEntityException(e.getMessage());
+     }catch(BusinessException e) {
+    	 throw new BusinessException("Erro interno do servidor" + e);
      }
     }
     
@@ -148,6 +160,8 @@ public class Services {
         	return converter.toDto(dto.get());
     }catch(UnprocessableEntityException e){
     	throw new UnprocessableEntityException(e.getMessage());
+     }catch(BusinessException e) {
+    	 throw new BusinessException("Erro interno do servidor" + e);
      }
     } 
 }

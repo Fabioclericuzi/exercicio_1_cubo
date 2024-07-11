@@ -47,7 +47,7 @@ public class HotelCaliforniaController  {
     @Operation(summary = "Listar todos os hotéis", method = "GET")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Lista de hotéis recuperada com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Não existem hotéis para serem listados"),
+        @ApiResponse(responseCode = "422", description = "Não existem hotéis para serem listados"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @GetMapping(value = "/listar")
@@ -58,7 +58,7 @@ public class HotelCaliforniaController  {
     @Operation(summary = "Achar hotéis pelo id", method = "GET")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Hotel encontrado com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Hotel não encontrado"),
+        @ApiResponse(responseCode = "422", description = "Hotel não encontrado"),
         @ApiResponse(responseCode = "500", description = "Erro interno de servidor")
     })
     @GetMapping(value="/{id}")
@@ -71,8 +71,8 @@ public class HotelCaliforniaController  {
     @Operation(summary = "Salvar hotéis", method = "POST")
     @ApiResponses(value = { 
     		@ApiResponse(responseCode = "200", description = "Hotel salvo com sucesso"), 
-    		@ApiResponse(responseCode = "409", description = "Hotel salvo com sucesso"),
-    		@ApiResponse(responseCode = "400", description = "Erro ao salvar hotel")
+    		@ApiResponse(responseCode = "409", description = "Já existe esse CNPJ cadastrado"),
+    		@ApiResponse(responseCode = "500", description = "Erro interno de servidor")
     })
     @PostMapping(value="/salvar")
     public HotelCaliforniaDto createHotelCalifornia(@Valid @RequestBody HotelCaliforniaDto hotelCalifornia){
@@ -81,20 +81,19 @@ public class HotelCaliforniaController  {
     @Operation(summary = "Deletar hotéis selecionados", method = "DELETE")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Hotel deletado com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Erro ao buscar hotel"),
+        @ApiResponse(responseCode = "422", description = "Hotel não encontrado"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Object> deleteHotelCalifornia(@Valid @PathVariable UUID id, HotelCaliforniaModel hotelCalifornia){
-        return hotelServices.deleteHotelCalifornia(id, hotelCalifornia);
+    public HotelCaliforniaDto deleteHotelCalifornia(@Valid @PathVariable UUID id){
+        return hotelServices.deleteHotelCalifornia(id);
             
     }
      
     @Operation(summary = "Atualizar informações dos hotéis selecionados", method = "PUT")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Hotel atualizado com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Hotel não encontrado"),
-        @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+        @ApiResponse(responseCode = "422", description = "Hotel não encontrado"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @PutMapping(value = "/{id}")
@@ -109,7 +108,7 @@ public class HotelCaliforniaController  {
     @Operation(summary = "Procurar hotéis pelo CNPJ", method = "GET")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Hotel encontrado com sucesso"),
-        @ApiResponse(responseCode = "404", description = "CNPJ não encontrado"),
+        @ApiResponse(responseCode = "422", description = "CNPJ não encontrado"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @GetMapping(value="/getcnpj/{cnpj}")        
@@ -120,7 +119,7 @@ public class HotelCaliforniaController  {
     @Operation(summary = "Procurar hotéis pelo Nome", method = "GET")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Hotel encontrado com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Nome do hotel não encontrado"),
+        @ApiResponse(responseCode = "422", description = "Nome do hotel não encontrado"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @GetMapping(value="/getnome/{nome}")        

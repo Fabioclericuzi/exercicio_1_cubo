@@ -35,5 +35,5 @@ public interface hotelCaliforniaRepository extends JpaRepository<HotelCalifornia
 	@Transactional(readOnly = true)
     @Query(value= "SELECT * FROM hotel_california hc WHERE hc.cnpj = :cnpj", nativeQuery=true)
     HotelCaliforniaModel validaCnpj(@Param("cnpj")String cnpj);
-    
+   
 }
