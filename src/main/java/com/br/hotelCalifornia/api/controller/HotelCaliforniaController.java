@@ -97,15 +97,11 @@ public class HotelCaliforniaController  {
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @PutMapping(value = "/{id}")
-     public ResponseEntity<HotelCaliforniaDto> update(@Valid @RequestBody HotelCaliforniaDto hotelCalifornia, @PathVariable UUID id) {
-          try {
-                HotelCaliforniaDto dto = hotelServices.updateHotelCalifornia(id, hotelCalifornia);
-                return ResponseEntity.ok(dto);
-           } catch (NoSuchElementException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-           }
-        }
-    @Operation(summary = "Procurar hotéis pelo CNPJ", method = "GET")
+     public HotelCaliforniaDto update(@Valid @RequestBody HotelCaliforniaDto hotelCalifornia, @PathVariable UUID id) {
+          return hotelServices.updateHotelCalifornia(id, hotelCalifornia);
+    }
+          
+     @Operation(summary = "Procurar hotéis pelo CNPJ", method = "GET")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Hotel encontrado com sucesso"),
         @ApiResponse(responseCode = "422", description = "CNPJ não encontrado"),
