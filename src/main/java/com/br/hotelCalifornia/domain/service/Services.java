@@ -20,6 +20,7 @@ import com.br.hotelCalifornia.api.dto.HotelCaliforniaDto;
 import com.br.hotelCalifornia.domain.conversores.Conversores;
 import com.br.hotelCalifornia.infraestructure.exceptions.BusinessException;
 import com.br.hotelCalifornia.infraestructure.exceptions.ConflictException;
+import com.br.hotelCalifornia.infraestructure.exceptions.NotFoundException;
 import com.br.hotelCalifornia.infraestructure.exceptions.UnprocessableEntityException;
 import com.br.hotelCalifornia.infraestructure.model.HotelCaliforniaModel;
 
@@ -65,11 +66,11 @@ public class Services {
     	try {
     	Optional<HotelCaliforniaModel> dto = repository.findById(id);
     	if(!dto.isPresent()) {
-    		throw new UnprocessableEntityException("Hotel não encontrado");
+    		throw new NotFoundException("Hotel não encontrado");
     	}
         return converter.toDto(dto.get());
-    }catch(UnprocessableEntityException e){
-    	throw new UnprocessableEntityException(e.getMessage());
+    }catch(NotFoundException e){
+    	throw new NotFoundException(e.getMessage());
     }catch(BusinessException e) {
     	throw new BusinessException("Erro interno do servidor" + e);
     }
@@ -81,9 +82,6 @@ public class Services {
         	if(repository.validaCnpj(dto.getCnpj()) != null){
         		throw new ConflictException("Já existe esse CNPJ cadastrado");
         	}
-        	 if (dto.getCnpj() == null || dto.getNome() == null || dto.getLocalizacao() == null) {
-				throw new UnprocessableEntityException("Os campos nome, CNPJ e localização são obrigatórios");
-			}
         
     	HotelCaliforniaModel model = converter.toModel(dto);
         return converter.toDto(repository.save(model));
@@ -100,11 +98,11 @@ public class Services {
     public HotelCaliforniaDto deleteHotelCalifornia(UUID id) {
         try {
             HotelCaliforniaModel hotel = repository.findById(id)
-                    .orElseThrow(() -> new UnprocessableEntityException("Hotel não encontrado"));
+                    .orElseThrow(() -> new NotFoundException("Hotel não encontrado"));
             repository.delete(hotel);
             return converter.toDto(hotel);
-        } catch (UnprocessableEntityException e) {
-            throw new UnprocessableEntityException(e.getMessage());
+        } catch (NotFoundException e) {
+            throw new NotFoundException(e.getMessage());
         } catch (BusinessException e) {
             throw new BusinessException("Hotel não pode ser deletado: " + e);
         }
@@ -115,15 +113,15 @@ public class Services {
     public HotelCaliforniaDto updateHotelCalifornia(UUID id, HotelCaliforniaDto dto) {
         try {
     	HotelCaliforniaModel hotel = repository.findById(id)
-                .orElseThrow(() -> new UnprocessableEntityException("Hotel não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Hotel não encontrado"));
 
         hotel.setNome(dto.getNome());
         hotel.setLocalizacao(dto.getLocalizacao());
         hotel.setCnpj(dto.getCnpj());
 
         return converter.toDto(repository.save(hotel));
-    }catch(UnprocessableEntityException e) {
-    	throw new UnprocessableEntityException(e.getMessage());
+    }catch(NotFoundException e) {
+    	throw new NotFoundException(e.getMessage());
     }catch(BusinessException e) {
     	throw new BusinessException(e.getMessage());
      }
@@ -139,12 +137,12 @@ public class Services {
         try {
         	Optional<HotelCaliforniaModel> dto = repository.findNome(nome);
         	if(!dto.isPresent()) {
-        		throw new UnprocessableEntityException("Nome do hotel não encontrado");
+        		throw new NotFoundException("Nome do hotel não encontrado");
         	}
         
     	return converter.toDto(dto.get());
-     }catch(UnprocessableEntityException e) {
-    	 throw new UnprocessableEntityException(e.getMessage());
+     }catch(NotFoundException e) {
+    	 throw new NotFoundException(e.getMessage());
      }catch(BusinessException e) {
     	 throw new BusinessException("Erro interno do servidor" + e);
      }
@@ -155,11 +153,11 @@ public class Services {
         try {
         	Optional<HotelCaliforniaModel> dto = repository.findCnpj(cnpj);
         	if(!dto.isPresent()) {
-        		throw new UnprocessableEntityException("CNPJ não encontrado");
+        		throw new NotFoundException("CNPJ não encontrado");
         	}
         	return converter.toDto(dto.get());
-    }catch(UnprocessableEntityException e){
-    	throw new UnprocessableEntityException(e.getMessage());
+    }catch(NotFoundException e){
+    	throw new NotFoundException(e.getMessage());
      }catch(BusinessException e) {
     	 throw new BusinessException("Erro interno do servidor" + e);
      }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.br.hotelCalifornia.infraestructure.exceptions.BusinessException;
 import com.br.hotelCalifornia.infraestructure.exceptions.ConflictException;
+import com.br.hotelCalifornia.infraestructure.exceptions.NotFoundException;
 import com.br.hotelCalifornia.infraestructure.exceptions.UnprocessableEntityException;
 
 @ControllerAdvice
@@ -31,6 +32,11 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ErrorResponse> handleUnprocessableResponseEntity(UnprocessableEntityException UnEx, HttpServletRequest request){
 		return response(UnEx.getMessage(), request, HttpStatus.UNPROCESSABLE_ENTITY, LocalDateTime.now());
 	}
+	
+	@ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException Nfex, HttpServletRequest request){
+        return response(Nfex.getMessage(), request, HttpStatus.NOT_FOUND, LocalDateTime.now());
+    }
 	
 	private ResponseEntity<ErrorResponse> response(final String message, final HttpServletRequest request,
 		final HttpStatus status, LocalDateTime data){
